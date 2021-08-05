@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import ReactTestUtils from "react-dom/test-utils";
 
 import { Appointment, AppointmentsDayView } from "../src/Appointment";
 // describe defines a test suite, which is simply a set of tests.
@@ -33,8 +34,8 @@ describe("AppointmentsDayView", () => {
   let container: HTMLDivElement;
   const today = new Date();
   const appointments = [
-    { startsAt: today.setHours(12, 0) },
-    { startsAt: today.setHours(13, 0) },
+    { startsAt: today.setHours(12, 0), customer: { firstName: "Ashley" } },
+    { startsAt: today.setHours(13, 0), customer: { firstName: "Jordan" } },
   ];
 
   beforeEach(() => {
@@ -62,5 +63,39 @@ describe("AppointmentsDayView", () => {
     expect(container.querySelectorAll("li")).toHaveLength(2);
     expect(container.querySelectorAll("li")[0].textContent).toEqual("12:00");
     expect(container.querySelectorAll("li")[1].textContent).toEqual("13:00");
+  });
+
+  it("initially shows a message saying there are no appointments today", () => {
+    render(<AppointmentsDayView appointments={[]} />);
+    expect(container.textContent).toMatch(
+      "There are no appointments scheduled for today."
+    );
+  });
+
+  it("selects the first appointment by default", () => {
+    render(<AppointmentsDayView appointments={appointments} />);
+    expect(container.textContent).toMatch("Ashley");
+  });
+
+  it("has a button element in each li", () => {
+    render(<AppointmentsDayView appointments={appointments} />);
+
+    const allButtonsInsideListItems = container.querySelectorAll("li > button");
+
+    const firstButton = container.querySelectorAll(
+      "li > button"
+    )[0] as HTMLButtonElement;
+
+    expect(allButtonsInsideListItems).toHaveLength(2);
+    expect(firstButton.type).toEqual("button");
+  });
+
+  it("renders another appointment when selected", () => {
+    render(<AppointmentsDayView appointments={appointments} />);
+
+    const button = container.querySelectorAll("button")[1];
+
+    ReactTestUtils.Simulate.click(button);
+    expect(container.textContent).toMatch("Jordan");
   });
 });

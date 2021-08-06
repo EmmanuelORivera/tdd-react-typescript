@@ -1,21 +1,63 @@
 import React, { useState, FC } from "react";
 
-interface Props {
-  customer: {
-    firstName: string;
-  };
+import { ICustomer } from "./types";
+
+const appointmentTimeOfDay = (startsAt: number) => {
+  const [h, m] = new Date(startsAt).toTimeString().split(":");
+  return `${h}:${m}`;
+};
+
+interface IAppointmentProps {
+  customer: ICustomer;
+  startsAt?: number;
+  stylist?: string;
+  service?: string;
+  notes?: string;
 }
 
 interface IAppointmentsDayViewProps {
   appointments: { startsAt: number; customer: { firstName: string } }[];
 }
 
-const appointmentTimeOfDay = (startsAt: number) => {
-  const [h, m] = new Date(startsAt).toTimeString().split(":");
-  return `${h}:${m}`;
-};
-export const Appointment: FC<Props> = ({ customer: { firstName } }) => {
-  return <div>{firstName}</div>;
+export const Appointment: FC<IAppointmentProps> = ({
+  customer,
+  notes,
+  service,
+
+  stylist,
+}) => {
+  const { firstName, lastName, phoneNumber } = customer;
+  return (
+    <div id="apointmentView">
+      <h3>Today's appointment at 09:00</h3>
+      <table>
+        <tbody>
+          <tr>
+            <td>Customer</td>
+            <td>
+              {firstName} {lastName}
+            </td>
+          </tr>
+          <tr>
+            <td>Phone</td>
+            <td>{phoneNumber}</td>
+          </tr>
+          <tr>
+            <td>Stylist</td>
+            <td>{stylist}</td>
+          </tr>
+          <tr>
+            <td>Service</td>
+            <td>{service}</td>
+          </tr>
+          <tr>
+            <td>Notes</td>
+            <td>{notes}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
 };
 
 export const AppointmentsDayView: FC<IAppointmentsDayViewProps> = ({

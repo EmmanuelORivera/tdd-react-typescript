@@ -2,10 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import ReactTestUtils from "react-dom/test-utils";
 
-import { Appointment, AppointmentsDayView } from "../src/Appointment";
+import { Appointment, AppointmentsDayView } from "../src/AppointmentsDayView";
 // describe defines a test suite, which is simply a set of tests.
 describe("Appointment", () => {
-  let customer;
+  let customer = {} as { firstName: string };
   let container: HTMLDivElement;
 
   beforeEach(() => {

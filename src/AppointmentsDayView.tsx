@@ -1,4 +1,5 @@
 import React, { useState, FC } from "react";
+import { CustomerForm } from "./CustomerForm";
 
 import { ICustomer } from "./types";
 
